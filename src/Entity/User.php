@@ -63,15 +63,21 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @Serializer\Exclude()
      */
     private $password;
 
     /**
-     * @var json
+     * @var string
+     */
+    protected $plainPassword;
+
+    /**
+     * @var array
      *
      * @ORM\Column(name="roles", type="json", nullable=false)
      */
-    private $roles;
+    private $roles = [];
 
     /**
      * @var \DateTime
@@ -109,6 +115,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->userLogs = new ArrayCollection();
+        $this->roles = ["ROLE_USER"];
     }
 
     public function getId(): ?int
@@ -164,6 +171,24 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+
+        $this->password = null;
+    }
+
     public function getRoles(): ?array
     {
         return $this->roles;
@@ -198,6 +223,19 @@ class User implements UserInterface
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $dateTimeNow = new DateTime('now');
+        $this->setUpdatedAt($dateTimeNow);
+        if ($this->getCreatedAt() === null) {
+            $this->setCreatedAt($dateTimeNow);
+        }
     }
 
     public function getEnabled(): ?int

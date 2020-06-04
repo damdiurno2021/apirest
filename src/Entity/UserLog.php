@@ -14,7 +14,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * UserLog
@@ -51,6 +51,7 @@ class UserLog
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userLogs")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
      */
     private $user;
 
