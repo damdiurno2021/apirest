@@ -103,7 +103,7 @@ class User implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="api_token", unique=true, type="string", length=255, nullable=true)
+     * @ORM\Column(name="api_token", type="text", length=1500, nullable=true)
      */
     private $apiToken;
 
