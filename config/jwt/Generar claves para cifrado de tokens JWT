@@ -1,0 +1,16 @@
+## Generar clave privada
+$ openssl genrsa -out var/jwt/private.pem -aes256 4096
+
+## Generar clave pública
+$ openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
+
+## Crear ruta en el proyecto JWTapp/config/jwt y
+## copiar dentro los archivos private.pem y private.pub
+
+### añadir estas líneas de configuración en el archivo .env
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=bda1d6a315b6098fd0bc48c8fcfd83d7
+JWT_TOKENTTL=3600
+###< lexik/jwt-authentication-bundle ###
